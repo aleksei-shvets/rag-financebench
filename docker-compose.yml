@@ -1,0 +1,20 @@
+services:
+    vector-db:
+        image: postgres:16-alpine
+        container_name: rag-financebench-vector-db
+        restart: unless-stopped
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER:-rag_user}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rag_password}
+            POSTGRES_DB: ${POSTGRES_DB:-rag-financebench-vector-d}
+#        volumes:
+#            - postgres_data:/var/lib/postgresql/data
+        networks: 
+            - rag-financebench-network
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-rag_user}"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+#    backend:
